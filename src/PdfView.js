@@ -8,13 +8,16 @@ import { db } from './utilities'
 
 import styles from './styles'
 
+import Header from './Header'
 import ListView from './ListView'
+import DetailedView from './DetailedView'
 
 const localStyles = {
 	root: {
 		display: "flex",
 		flexDirection: "column",
-		justifyContent: "center"
+		justifyContent: "center",
+		padding: "3em"
 	},
 	title: {
 		padding: "3em",
@@ -44,6 +47,16 @@ const localStyles = {
 	glyph: {
 		padding: "0 0.3em 0 0",
 		margin: 0
+	},
+	overlay: {
+		position: "absolute",
+		width: "90%",
+		height: "90%",
+		background: "rgba(0, 0, 0, 0.3)",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: "1em 4em 4em 4em"
 	}
 }
 
@@ -59,17 +72,16 @@ export default class PdfView extends React.Component {
 		this.getPdfs = this.getPdfs.bind(this)
 		this.del = this.del.bind(this),
 		this.select = this.select.bind(this)
+		this.done = this.done.bind(this)
 	}
 
-	state = { pdfs: {}, loading: true }
+	state = { pdfs: {}, loading: true, selected: null }
 
 	componentWillMount () {
 		db.collection("pdfs").onSnapshot(this.getPdfs)
 	}
 
 	async getPdfs (snapshot) {
-		
-		console.log("getPdfs: ", snapshot)
 		this.setState({ loading: true })
 		const pdfs = {}
 
@@ -102,7 +114,7 @@ export default class PdfView extends React.Component {
 	done () { this.setState({ selected: null }) }
 
 	render () {
-		let { del, select } = this
+		let { del, select, done } = this
 		let { pdfs, selected } = this.state
 		let { auth } = this.props
 
@@ -110,6 +122,7 @@ export default class PdfView extends React.Component {
 		
 		return (
 			<div style={ localStyles.root } >
+				<Header />
 				<div style={ localStyles.title } >
 					<h3 style={ localStyles.titleText } >Saved PDFS</h3>
 					<div style={ localStyles.titleButtons } >
@@ -124,7 +137,9 @@ export default class PdfView extends React.Component {
 					</div>
 				</div>
 				<ListView { ...{ select, pdfs, del } } />
-				{/* <DetailView { ...{ selected, done } } /> */}
+				{ selected &&
+					<div style={ localStyles.overlay } ><DetailedView { ...{ selected, done } } /></div>
+				}
 			</div>
 		)
 	}

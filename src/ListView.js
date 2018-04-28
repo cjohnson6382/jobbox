@@ -48,7 +48,8 @@ const localStyles = {
 	},
 	del: {
 		background: "rgba(224, 224, 224, 1)",
-		margin: "0 0 0 1em"
+		margin: "0 0 0 1em",
+		alignSelf: "flex-end"
 	},
 	root: {
 		display: "flex",

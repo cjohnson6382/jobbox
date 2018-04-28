@@ -8,7 +8,6 @@ import styles from './styles'
 
 import Auth from './Auth'
 
-import Header from './Header'
 import Login from './Login'
 import PdfView from './PdfView'
 
@@ -19,7 +18,6 @@ class App extends React.Component {
 		return (
 			<BrowserRouter>
 				<div style={ styles.app } >
-					<Header />
 					<div style={ styles.body } >
 						<Route exact path="/login" render={ routeProps => <Login auth={ auth } { ...routeProps } /> } />
 						<Route exact path="/" render={ routeProps => <PdfView auth={ auth } { ...routeProps } /> } />
