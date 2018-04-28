@@ -20,11 +20,14 @@ const localStyles = {
 	},
 	listItem: {
 		display: "flex",
-		flexDirection: "row"
+		flexDirection: "row",
+		flex: 1,
+		padding: "0.2em"
 	},
 	header: {
 		display: "flex",
 		flexDirection: "row",
+		alignItems: "center",
 		background: "rgba(240, 240, 240, 1)",
 		border: "1px solid rgba(212, 212, 212, 1)",
 		fontWeight: "bold",
@@ -35,14 +38,17 @@ const localStyles = {
 	},
 	name: {
 		display: "flex",
+		flex: 1,
 		flexDirection: "row"
 	},
 	actions: {
 		display: "flex",
+		flex: 1,
 		flexDirection: "row"
 	},
 	del: {
-		background: "rgba(224, 224, 224, 1)"
+		background: "rgba(224, 224, 224, 1)",
+		margin: "0 0 0 1em"
 	},
 	root: {
 		display: "flex",
@@ -53,17 +59,21 @@ const localStyles = {
 
 const BriefPdf = ({ pdf, select, del }) => (
 	<div style={ localStyles.listItem } >
-		<div style={ localStyles.name } >
-			<Glyphicon glyph="file" style={ localStyles.glyph } />
-			{ pdf.name }
-		</div>
-		<div style={ localStyles.actions } >
-			<div style={ styles.button } onClick={ () => select(pdf) } >Open</div>
-			<div style={ { ...styles.button, ...localStyles.del } } onClick={ () => del(pdf.id) } >
-				Delete
-				<Glyphicon glyph="remove" style={ { padding: "0 0 0 0.3em" } } />
+		{ !!pdf &&
+			<div style={ localStyles.listItem } >
+				<div style={ localStyles.name } >
+					<Glyphicon glyph="file" style={ localStyles.glyph } />
+					{ pdf.name }
+				</div>
+				<div style={ localStyles.actions } >
+					<div style={ styles.button } onClick={ () => select(pdf) } >Open</div>
+					<div style={ { ...styles.button, ...localStyles.del } } onClick={ () => del(pdf.id) } >
+						Delete
+						<Glyphicon glyph="remove" style={ { padding: "0 0 0 0.3em" } } />
+					</div>
+				</div>
 			</div>
-		</div>
+		}
 	</div>
 )
 
@@ -78,9 +88,7 @@ const ListView = ({ select, pdfs, del }) => (
 	<div style={ localStyles.root } >
 		<Header />
 		<div style={ localStyles.listContainer } >
-			{ pdfs.map(pdf => {
-				<BriefPdf { ...{ select, pdfs, del } } />
-			}) }
+			{ pdfs.map((pdf, i) => <BriefPdf key={ i } { ...{ select, pdf, del } } />) }
 		</div>
 	</div>
 )

@@ -9,7 +9,8 @@ const styles = {
 		boxShadow: "inset 0 0 0 0 rgba(39,41,43,.15)",
 		padding: "0.5em",
 		borderRadius: "0.3em",
-		fontWeight: "bold"
+		fontWeight: "bold",
+		cursor: "pointer"
 	},
 	columnContainer: {
 		flex: 1,

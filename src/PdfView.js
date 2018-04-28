@@ -68,6 +68,8 @@ export default class PdfView extends React.Component {
 	}
 
 	async getPdfs (snapshot) {
+		
+		console.log("getPdfs: ", snapshot)
 		this.setState({ loading: true })
 		const pdfs = {}
 
@@ -92,7 +94,11 @@ export default class PdfView extends React.Component {
 
 	}
 	
-	select (id) { this.setState({ selected: this.state.pdfs[id] }) }
+	select (pdf) {
+		this.setState({ selected: pdf })
+		// console.log("selected a PDF: ", pdf)
+	}
+	
 	done () { this.setState({ selected: null }) }
 
 	render () {
