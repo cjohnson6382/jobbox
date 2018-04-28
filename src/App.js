@@ -18,10 +18,8 @@ class App extends React.Component {
 		return (
 			<BrowserRouter>
 				<div style={ styles.app } >
-					<div style={ styles.body } >
-						<Route exact path="/login" render={ routeProps => <Login auth={ auth } { ...routeProps } /> } />
-						<Route exact path="/" render={ routeProps => <PdfView auth={ auth } { ...routeProps } /> } />
-					</div>
+					<Route exact path="/login" render={ routeProps => <Login auth={ auth } { ...routeProps } /> } />
+					<Route exact path="/" render={ routeProps => <PdfView auth={ auth } { ...routeProps } /> } />
 				</div>
 			</BrowserRouter>
 		)

@@ -107,10 +107,12 @@ export default class DetailedView extends React.Component {
 			let viewport = page.getViewport(1)
 			
 			let canvasContext = this.canvas.current.getContext('2d')
+			// canvasContext.imageSmoothingEnabled = false
+			
 			const desiredWidth = this.canvas.current.width
 			
-			const scale = desiredWidth / viewport.width
-			viewport = page.getViewport(scale)
+			// const scale = desiredWidth / viewport.width
+			// viewport = page.getViewport(scale)
 			
 			const renderContext = { canvasContext, viewport }
 			

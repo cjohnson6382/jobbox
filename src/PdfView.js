@@ -17,7 +17,8 @@ const localStyles = {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
-		padding: "3em"
+		padding: "3em",
+		height: "100%"
 	},
 	title: {
 		padding: "3em",

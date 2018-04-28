@@ -18,9 +18,6 @@ const styles = {
 		alignItems: "center",
 		justifyContent: "center",
 		flexDirection: "column"
-	},
-	body: {
-		flex: 5
 	}
 }
 
