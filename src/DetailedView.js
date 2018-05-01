@@ -70,14 +70,17 @@ export default class DetailedView extends React.Component {
 		this.renderPage = this.renderPage.bind(this)
 
 		this.canvas = React.createRef()
+		this.wrapper = React.createRef()
 	}
 	
 	state = {
-		pp: 0,
-		total: null
+		pp: 1,
+		total: null,
+		rendering: false
 	}
 	
 	async componentWillMount () {
+		this.setState({ rendering: true })
 		const pdf = await pdfjsLib.getDocument(this.props.selected.url)
 		const page = await pdf.getPage(1)
 		const total = pdf.numPages
@@ -89,9 +92,9 @@ export default class DetailedView extends React.Component {
 	
 	async changePage (pageNum) {
 		let { pdf, pp, total, rendering } = this.state
-		if (!rendering && pageNum < total && pp !== pageNum) {
+		if (!rendering && pageNum <= total && pp !== pageNum) {
 			const page = await pdf.getPage(pageNum)
-			this.setState({ page })
+			this.setState({ page, pp: pageNum })
 			this.renderPage()
 		}
 		else {
@@ -99,20 +102,17 @@ export default class DetailedView extends React.Component {
 		}
 	}
 
-	renderPage () {
+	async renderPage () {
 		let { page, pp, total } = this.state
-		
+		await this.setState({ rendering: true })
+
 		if (page) {
-			this.setState({ rendering: true })
 			let viewport = page.getViewport(1)
 			
+			this.canvas.current.width = viewport.width
+			this.canvas.current.height = viewport.height
+			
 			let canvasContext = this.canvas.current.getContext('2d')
-			// canvasContext.imageSmoothingEnabled = false
-			
-			const desiredWidth = this.canvas.current.width
-			
-			// const scale = desiredWidth / viewport.width
-			// viewport = page.getViewport(scale)
 			
 			const renderContext = { canvasContext, viewport }
 			
@@ -122,23 +122,27 @@ export default class DetailedView extends React.Component {
 	}
 	
 	render () {
-		let { pp, total } = this.state
+		let { selected } = this.props
+		let { pp, total, rendering } = this.state
 		
 		return (
 			<div style={ { display: "flex", flex: 1, flexDirection: "column", width: "100%", height: "100%" } } >
 				<div style={ localStyles.pagerContainer } >
-					<div style={ localStyles.pager } onClick={ () => this.changePage(pp--) } >
+					<div style={ localStyles.pager } onClick={ () => this.changePage(--pp) } >
 						<div style={ localStyles.pagerArrow } ><Glyphicon glyph="chevron-left" /></div>
 						<div style={ localStyles.pagerLabel } >Prev</div>
 					</div>
-					<div style={ localStyles.pager } onClick={ () => this.changePage(pp++) } >
+					<div style={ localStyles.pager } onClick={ () => this.changePage(++pp) } >
 						<div style={ localStyles.pagerLabel } >Next</div>
 						<div style={ localStyles.pagerArrow } ><Glyphicon glyph="chevron-right" style={ localStyles.pagerArrow } /></div>
 					</div>
 					<div>Page { pp } of { total }</div>
 					<div style={ localStyles.done } onClick={ this.props.done } >Done</div>
 				</div>
-				<canvas style={ { width: "100%", height: "100%" } } ref={ this.canvas } ></canvas>
+				{ rendering && <div style={ { fontWeight: "bold", fontSize: "250%", padding: "1em" } } >Loading...</div> }
+				<a href={ selected.url } >
+					<canvas ref={ this.canvas } style={ { width: "100%" } } ></canvas>
+				</a>
 			</div>
 		)
 	}
